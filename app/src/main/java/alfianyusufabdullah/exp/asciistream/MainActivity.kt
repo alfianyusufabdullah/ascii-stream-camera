@@ -1,5 +1,6 @@
 package alfianyusufabdullah.exp.asciistream
 
+import AsciiImageAnalyzer
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
+
+
     }
 
     private fun startCamera() {
@@ -50,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             val imageAnalyzer = ImageAnalysis.Builder()
                     .build()
                     .also {
-                        it.setAnalyzer(cameraExecutor, AsciiImageAnalyzer { resultSpannable ->
+                        it.setAnalyzer(cameraExecutor, AsciiImageAnalyzer(this) { resultSpannable ->
                             result.text = resultSpannable
                         })
                     }
