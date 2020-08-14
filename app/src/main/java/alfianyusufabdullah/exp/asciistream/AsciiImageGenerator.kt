@@ -4,11 +4,14 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
+import kotlin.math.ceil
+import kotlin.math.round
 
 class AsciiImageGenerator(private val image: Bitmap) : CoroutineScope {
 
@@ -32,6 +35,12 @@ class AsciiImageGenerator(private val image: Bitmap) : CoroutineScope {
                 val luminanceValue = 0.2126 * red + 0.7152 * green + 0.0722 * blue
                 singleCharsAscii = generateAsciiSingleCharacterFromLuminance(luminanceValue)
                 resultSpannable.append(singleCharsAscii)
+                resultSpannable.setSpan(
+                    ForegroundColorSpan(Color.rgb(red, green, blue)),
+                    resultSpannable.lastIndex,
+                    resultSpannable.lastIndex + 1,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
             }
 
             resultSpannable.append("\n")
@@ -44,16 +53,13 @@ class AsciiImageGenerator(private val image: Bitmap) : CoroutineScope {
 
     private fun generateAsciiSingleCharacterFromLuminance(luminance: Double): Char //takes the grayscale value as parameter
     {
-        return when {
-            luminance >= 230.0 -> ' '
-            luminance >= 200.0 -> '.'
-            luminance >= 130.0 -> ':'
-            luminance >= 100.0 -> 'o'
-            luminance >= 80.0 -> 'O'
-            luminance >= 60.0 -> '&'
-            luminance >= 70.0 -> '8'
-            luminance >= 50.0 -> '#'
-            else -> '@'
-        }
+        val ascii = "08@".toCharArray()
+//        val ascii = " .,:;i1tfLCG08@".toCharArray()
+        ascii.reverse()
+        val asciiPosition = round(luminance / (255 / ascii.lastIndex))
+
+
+
+        return ascii[asciiPosition.toInt()]
     }
 }

@@ -1,4 +1,5 @@
-package alfianyusufabdullah.exp.asciistream
+import alfianyusufabdullah.exp.asciistream.AsciiImageGenerator
+
 
 import android.annotation.SuppressLint
 import android.graphics.*
@@ -13,7 +14,7 @@ class AsciiImageAnalyzer(private val listener: (Spannable) -> Unit) : ImageAnaly
     @SuppressLint("UnsafeExperimentalUsageError")
     override fun analyze(image: ImageProxy) {
         val raw = image.image?.toBitmap()?.rotateAndFlipBitmap(-90f)
-        val convert = Bitmap.createScaledBitmap(raw as Bitmap, 80, 80, true)
+        val convert = Bitmap.createScaledBitmap(raw as Bitmap, 30, 30, true)
         AsciiImageGenerator(convert).run {
             listener(it)
         }
@@ -42,7 +43,7 @@ class AsciiImageAnalyzer(private val listener: (Spannable) -> Unit) : ImageAnaly
 
         val yuvImage = YuvImage(nv21, ImageFormat.NV21, this.width, this.height, null)
         val out = ByteArrayOutputStream()
-        yuvImage.compressToJpeg(Rect(0, 0, yuvImage.width, yuvImage.height), 50, out)
+        yuvImage.compressToJpeg(Rect(0, 0, yuvImage.width, yuvImage.height), 90, out)
         val imageBytes = out.toByteArray()
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     }
@@ -50,7 +51,7 @@ class AsciiImageAnalyzer(private val listener: (Spannable) -> Unit) : ImageAnaly
     private fun Bitmap.rotateAndFlipBitmap(degrees: Float): Bitmap {
         val matrix = Matrix().apply {
             postRotate(degrees)
-            postScale(-1f, 1f, width / 2f, height / 2f)
+            //postScale(-1f, 1f, width / 2f, height / 2f)
         }
         return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
     }

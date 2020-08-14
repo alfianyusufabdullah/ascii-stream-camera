@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                         it.setSurfaceProvider(cameraPreview.createSurfaceProvider())
                     }
 
-            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
             val imageAnalyzer = ImageAnalysis.Builder()
                     .build()
                     .also {
